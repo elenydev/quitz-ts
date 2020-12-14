@@ -18,7 +18,6 @@ A TypeScript starter for Next.js that includes all you need to build amazing pro
 
 - 📏 **ESLint** — Pluggable JavaScript linter
 - 💖 **Prettier** - Opinionated Code Formatter
-- 🐶 **Husky** — Use git hooks with ease
 - 📄 **Commitizen** - Conventional commit messages CLI
 - 🚓 **Commitlint** - Lint commit messages
 - 🖌 **Renovate** - Dependency update tool
