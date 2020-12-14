@@ -66,7 +66,9 @@ const Quiz = (): React.ReactNode => {
     <Wrapper>
       {currentQuestion < quizLength && (
         <>
-          <h2>Quiz</h2>
+          <h2>
+            Question: {currentQuestion + 1} / {quizLength}
+          </h2>
           <FormControl component="fieldset">
             <FormLabel component="legend">{question}</FormLabel>
             <RadioGroup
@@ -97,7 +99,7 @@ const Quiz = (): React.ReactNode => {
           </Button>
         </>
       )}
-      {currentQuestion >= quizLength     && (
+      {currentQuestion >= quizLength && (
         <>
           <h3>Your score is:</h3>
           <h4>{`${Math.floor((100 * getScore()) / quizLength)} %`}</h4>
