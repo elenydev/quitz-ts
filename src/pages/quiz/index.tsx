@@ -3,17 +3,28 @@ import styled from 'styled-components';
 import { QUIZ_QUESTIONS } from '@/data/quizQuestions';
 
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  padding: 0 20px;
+
+  .MuiTypography-body1 {
+    font-size: 0.8rem;
+    white-space: normal;
+  }
+
+  & > fieldset,
+  h4 {
+    margin: 12px 0px;
+  }
 `;
 
 interface Answer {
@@ -57,20 +68,23 @@ const Quiz = (): React.ReactNode => {
   const handleCurrentAnswer = (answer: Answer): void =>
     setCurrentAnswer(answer);
 
-  const getScore = (): number => {
+  const getScore = (): string => {
     const score = allAnswers.filter((answer) => answer.points > 0);
-    return score.length;
+    const finalScore = `${Math.floor((100 * score.length) / quizLength)} %`;
+    return finalScore;
   };
 
   return (
     <Wrapper>
       {currentQuestion < quizLength && (
         <>
-          <h2>
+          <Typography variant="h5">
             Question: {currentQuestion + 1} / {quizLength}
-          </h2>
+          </Typography>
           <FormControl component="fieldset">
-            <FormLabel component="legend">{question}</FormLabel>
+            <Typography variant="h6" component="legend">
+              {question}
+            </Typography>
             <RadioGroup
               aria-label={question}
               name={question}
@@ -101,8 +115,8 @@ const Quiz = (): React.ReactNode => {
       )}
       {currentQuestion >= quizLength && (
         <>
-          <h3>Your score is:</h3>
-          <h4>{`${Math.floor((100 * getScore()) / quizLength)} %`}</h4>
+          <Typography variant="h3">Your score is:</Typography>
+          <Typography variant="h4">{getScore()}</Typography>
           <Button variant="contained" color="secondary" onClick={restartQuiz}>
             Try again
           </Button>
