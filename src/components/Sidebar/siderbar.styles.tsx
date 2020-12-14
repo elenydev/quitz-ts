@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import MailIcon from '@material-ui/icons/Mail';
+import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 export const useStyles = makeStyles({
@@ -13,6 +14,9 @@ export const useStyles = makeStyles({
 });
 
 export const Wrapper = styled.div`
+  position: absolute;
+  left: 15px;
+  top: 15px;
   display: flex;
   & > label > .MuiButton-containedSecondary {
     background-color: ${({ theme }) => theme.colors.darkOrange};
@@ -52,6 +56,11 @@ export interface Route {
 }
 
 export const RoutesList: Route[] = [
+  {
+    route: `Home`,
+    icon: <HomeIcon />,
+    destination: `/`,
+  },
   {
     route: `Quiz`,
     icon: <AccountCircleIcon />,
