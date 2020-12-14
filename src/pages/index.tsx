@@ -6,7 +6,6 @@ const Home: React.FC = () => (
     <Head>
       <title>Quiz app</title>
     </Head>
-    <h1>Hi everyone</h1>
   </>
 );
 

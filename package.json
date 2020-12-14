@@ -32,9 +32,12 @@
     ]
   },
   "dependencies": {
+    "@material-ui/core": "4.11.2",
+    "@material-ui/icons": "4.11.2",
     "@material-ui/styles": "4.11.2",
     "@types/material-ui": "0.21.8",
     "@types/styled-components": "5.1.5",
+    "clsx": "1.1.1",
     "material-ui": "0.20.2",
     "next": "10.0.3",
     "react": "17.0.1",
