@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { RoutesList } from '@/helpers/constants';
+import { Route } from '@/interfaces';
 
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
@@ -9,13 +11,7 @@ import clsx from 'clsx';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import {
-  useStyles,
-  Wrapper,
-  StyledPaper,
-  RoutesList,
-  Route,
-} from './siderbar.styles';
+import { useStyles, Wrapper, StyledPaper } from './siderbar.styles';
 
 const SIDEBAR_DIRECTION = `left`;
 

@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useForm, Controller } from 'react-hook-form';
 
+// eslint-disable-next-line import/extensions
+import { QUESTION_DEFAULT_VALUES } from '@/helpers/constants.tsx';
+import { AddQuestionFormData } from '@/interfaces';
 import {
   Box,
   Button,
@@ -9,8 +13,8 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-  FormControl,
 } from '@material-ui/core';
+import ErrorInformation from '../ErrorInformation';
 
 const Wrapper = styled.div`
   .MuiButton-containedSecondary {
@@ -24,7 +28,7 @@ const FormWrapper = styled.div`
     margin: 0;
   }
 
-  .MuiBox-root {
+  .MuiFormLabel-root {
     flex: 1;
   }
 `;
@@ -42,65 +46,109 @@ const InputsContainer = styled.div`
   width: 100%;
 `;
 
-const AddQuestion = () => (
-  <Wrapper>
-    <form>
-      <QuestionBox>
-        <Box>
-          <FormLabel>
-            <Input type="text" name="question" placeholder="Question" />
-          </FormLabel>
-        </Box>
-      </QuestionBox>
+const AddQuestion = (): React.ReactNode => {
+  const { register, handleSubmit, errors, reset, control } = useForm({
+    defaultValues: QUESTION_DEFAULT_VALUES,
+  });
 
-      <FormWrapper>
-        <InputsContainer>
+  const onSubmit = handleSubmit((data: AddQuestionFormData): void =>
+    console.log(data),
+  );
+
+  return (
+    <Wrapper>
+      <form onSubmit={onSubmit}>
+        <QuestionBox>
           <Box>
             <FormLabel>
-              <Input type="text" name="answer1" placeholder="1. Answer" />
+              <Input
+                type="text"
+                name="question"
+                placeholder="Question"
+                inputRef={register({
+                  required: true,
+                })}
+              />
             </FormLabel>
           </Box>
+        </QuestionBox>
 
-          <Box>
+        <FormWrapper>
+          <InputsContainer>
             <FormLabel>
-              <Input type="text" name="answer2" placeholder="2. Answer" />
+              <Input
+                type="text"
+                name="answer1"
+                placeholder="1. Answer"
+                inputRef={register({
+                  required: true,
+                })}
+              />
             </FormLabel>
-          </Box>
 
-          <Box>
             <FormLabel>
-              <Input type="text" name="answer1" placeholder="3. Answer" />
+              <Input
+                type="text"
+                name="answer2"
+                placeholder="2. Answer"
+                inputRef={register({
+                  required: true,
+                })}
+              />
             </FormLabel>
-          </Box>
 
-          <Box>
             <FormLabel>
-              <Input type="text" name="answer1" placeholder="4. Answer" />
+              <Input
+                type="text"
+                name="answer3"
+                placeholder="3. Answer"
+                inputRef={register({
+                  required: true,
+                })}
+              />
             </FormLabel>
-          </Box>
-        </InputsContainer>
 
-        <>
-          <FormControl component="fieldset">
-            <RadioGroup
-              aria-label="gender"
+            <FormLabel>
+              <Input
+                type="text"
+                name="answer4"
+                placeholder="4. Answer"
+                inputRef={register({
+                  required: true,
+                })}
+              />
+            </FormLabel>
+          </InputsContainer>
+
+          <>
+            <Controller
+              as={
+                <RadioGroup aria-label="corectAnswer">
+                  <FormControlLabel value="1" control={<Radio />} label="" />
+                  <FormControlLabel value="2" control={<Radio />} label="" />
+                  <FormControlLabel value="3" control={<Radio />} label="" />
+                  <FormControlLabel value="4" control={<Radio />} label="" />
+                </RadioGroup>
+              }
               name="correctAnswer"
-              // value={value}
-              // onChange={handleChange}
-            >
-              <FormControlLabel value="1" control={<Radio />} />
-              <FormControlLabel value="2" control={<Radio />} />
-              <FormControlLabel value="3" control={<Radio />} />
-              <FormControlLabel value="4" control={<Radio />} />
-            </RadioGroup>
-          </FormControl>
-        </>
-      </FormWrapper>
-      <Button variant="contained" color="secondary">
-        Add
-      </Button>
-    </form>
-  </Wrapper>
-);
-
+              control={control}
+              rules={{ required: true }}
+            />
+          </>
+        </FormWrapper>
+        <Button variant="contained" color="secondary" type="submit">
+          Add
+        </Button>
+      </form>
+      {(errors.answer1 ||
+        errors.answer2 ||
+        errors.answer3 ||
+        errors.answer4 ||
+        errors.question ||
+        errors.correctAnswer) && (
+        <ErrorInformation>You must provide all fields</ErrorInformation>
+      )}
+    </Wrapper>
+  );
+};
 export default AddQuestion;
