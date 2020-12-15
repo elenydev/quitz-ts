@@ -1,5 +1,7 @@
 import React from 'react';
 
-const AddQuestion = (): React.ReactNode => <h1>Hello</h1>;
+import AddQuestion from '@/components/AddQuestion/index';
 
-export default AddQuestion;
+const Add = (): React.FC => <AddQuestion />;
+
+export default Add;
