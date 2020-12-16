@@ -29,3 +29,5 @@ export const RoutesList: Route[] = [
     destination: `/questions/add`,
   },
 ];
+
+export const DB_URL = `http://localhost:8080`;

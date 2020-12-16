@@ -12,3 +12,13 @@ export interface AddQuestionFormData {
   answer4: string;
   correctAnswer: number;
 }
+
+export interface Answer {
+  answer: string;
+  points: number;
+}
+
+export interface Question {
+  question: string;
+  answers: Answer[];
+}

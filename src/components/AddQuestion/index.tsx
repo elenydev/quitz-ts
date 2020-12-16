@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useForm, Controller } from 'react-hook-form';
 
 // eslint-disable-next-line import/extensions
-import { QUESTION_DEFAULT_VALUES } from '@/helpers/constants.tsx';
-import { AddQuestionFormData } from '@/interfaces';
+import { DB_URL, QUESTION_DEFAULT_VALUES } from '@/helpers/constants.tsx';
+import { AddQuestionFormData, Answer, Question } from '@/interfaces';
 import {
   Box,
   Button,
@@ -46,15 +46,51 @@ const InputsContainer = styled.div`
   width: 100%;
 `;
 
+const addQuestion = async (question: Question, reset): Promise<void> => {
+  try {
+    await fetch(`${DB_URL}/questions/add`, {
+      method: `POST`,
+      headers: {
+        'Content-Type': `application/json`,
+      },
+      body: JSON.stringify(question),
+    });
+    reset();
+  } catch (err) {
+    throw new Error(`Something went wrong`);
+  }
+};
+
 const AddQuestion = (): React.ReactNode => {
   const { register, handleSubmit, errors, reset, control } = useForm({
     defaultValues: QUESTION_DEFAULT_VALUES,
   });
 
-  const onSubmit = handleSubmit((data: AddQuestionFormData): void =>
-    console.log(data),
-  );
-
+  const onSubmit = handleSubmit((data: AddQuestionFormData): void => {
+    const {
+      question,
+      answer1,
+      answer2,
+      answer3,
+      answer4,
+      correctAnswer,
+    } = data;
+    const answers: string[] = [answer1, answer2, answer3, answer4];
+    const answersArray: Answer[] = [];
+    answers.forEach((answer) => {
+      const answerObj = {
+        answer,
+        points: 0,
+      };
+      answersArray.push(answerObj);
+    });
+    answersArray[correctAnswer - 1].points = 1;
+    const questionObject: Question = {
+      question,
+      answers: answersArray,
+    };
+    addQuestion(questionObject, reset);
+  });
   return (
     <Wrapper>
       <form onSubmit={onSubmit}>
