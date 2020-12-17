@@ -46,7 +46,7 @@ const InputsContainer = styled.div`
   width: 100%;
 `;
 
-const addQuestion = async (question: Question, reset): Promise<void> => {
+const addQuestion = async (question: Question, resetForm): Promise<void> => {
   try {
     await fetch(`${DB_URL}/questions/add`, {
       method: `POST`,
@@ -55,10 +55,26 @@ const addQuestion = async (question: Question, reset): Promise<void> => {
       },
       body: JSON.stringify(question),
     });
-    reset();
+    resetForm();
   } catch (err) {
     throw new Error(`Something went wrong`);
   }
+};
+
+const addPointsToQuestions = (
+  answers: string[],
+  correctAnswer: number,
+): Answer[] => {
+  const answersArray: Answer[] = [];
+  answers.forEach((answer) => {
+    const answerObj = {
+      answer,
+      points: 0,
+    };
+    answersArray.push(answerObj);
+  });
+  answersArray[correctAnswer - 1].points = 1;
+  return answersArray;
 };
 
 const AddQuestion = (): React.ReactNode => {
@@ -67,24 +83,10 @@ const AddQuestion = (): React.ReactNode => {
   });
 
   const onSubmit = handleSubmit((data: AddQuestionFormData): void => {
-    const {
-      question,
-      answer1,
-      answer2,
-      answer3,
-      answer4,
-      correctAnswer,
-    } = data;
-    const answers: string[] = [answer1, answer2, answer3, answer4];
-    const answersArray: Answer[] = [];
-    answers.forEach((answer) => {
-      const answerObj = {
-        answer,
-        points: 0,
-      };
-      answersArray.push(answerObj);
-    });
-    answersArray[correctAnswer - 1].points = 1;
+    const { question, correctAnswer, ...allAnswers } = data;
+    const answers: string[] = Object.values(allAnswers);
+    const answersArray = addPointsToQuestions(answers, correctAnswer);
+
     const questionObject: Question = {
       question,
       answers: answersArray,

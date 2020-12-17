@@ -30,4 +30,9 @@ export const RoutesList: Route[] = [
   },
 ];
 
+export const DUMMY_QUESTION = {
+  question: ``,
+  answers: [],
+};
+
 export const DB_URL = `http://localhost:8080`;
