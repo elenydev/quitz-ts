@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
-import MailIcon from '@material-ui/icons/Mail';
-import HomeIcon from '@material-ui/icons/Home';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 export const useStyles = makeStyles({
   list: {
@@ -48,27 +45,3 @@ export const StyledPaper = styled.div`
     text-align: center;
   }
 `;
-
-export interface Route {
-  route: string;
-  icon: React.ReactElement;
-  destination: string;
-}
-
-export const RoutesList: Route[] = [
-  {
-    route: `Home`,
-    icon: <HomeIcon />,
-    destination: `/`,
-  },
-  {
-    route: `Quiz`,
-    icon: <AccountCircleIcon />,
-    destination: `/quiz`,
-  },
-  {
-    route: `Add question`,
-    icon: <MailIcon />,
-    destination: `/questions/add`,
-  },
-];

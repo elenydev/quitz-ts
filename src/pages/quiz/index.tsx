@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { QUIZ_QUESTIONS } from '@/data/quizQuestions';
+import { DB_URL, DUMMY_QUESTION } from '@/helpers/constants';
+import { Question } from '@/interfaces';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -32,20 +33,32 @@ interface Answer {
   points: number;
 }
 
-const DUMMY_QUESTION = {
-  question: ``,
-  answers: [],
+const getQuizQuestions = async (): Promise<[] | Question[]> => {
+  const request = await fetch(`${DB_URL}/questions/all`);
+  const { questions } = await request.json();
+  if (!questions) {
+    return [];
+  }
+  return questions;
+};
+
+const formQuizQuestion = (question: string): string => {
+  if (!question.includes(`?`)) {
+    return `${question}?`;
+  }
+  return question;
 };
 
 const Quiz = (): React.ReactNode => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [quizQuestions, setQuizQuestions] = useState<[] | Question[]>([]);
   const [answerValue, setAnswerValue] = useState<string>(null);
   const [currentAnswer, setCurrentAnswer] = useState<Answer>();
   const [allAnswers, setAllAnswers] = useState<Answer[]>([]);
-  const { question, answers } = QUIZ_QUESTIONS[currentQuestion]
-    ? QUIZ_QUESTIONS[currentQuestion]
+  const { question, answers } = quizQuestions[currentQuestion]
+    ? quizQuestions[currentQuestion]
     : DUMMY_QUESTION;
-  const quizLength = QUIZ_QUESTIONS.length;
+  const quizLength = quizQuestions.length;
 
   const setNextQuestion = (): void => {
     setCurrentQuestion(currentQuestion + 1);
@@ -74,53 +87,63 @@ const Quiz = (): React.ReactNode => {
     return finalScore;
   };
 
+  useEffect(() => {
+    (async () => {
+      const questions = await getQuizQuestions();
+      setQuizQuestions(questions);
+    })();
+  }, []);
+
   return (
     <Wrapper>
-      {currentQuestion < quizLength && (
-        <>
-          <Typography variant="h5">
-            Question: {currentQuestion + 1} / {quizLength}
-          </Typography>
-          <FormControl component="fieldset">
-            <Typography variant="h6" component="legend">
-              {question}
+      {quizQuestions.length > 1 &&
+        (currentQuestion < quizLength ? (
+          <>
+            <Typography variant="h5">
+              Question: {currentQuestion + 1} / {quizLength}
             </Typography>
-            <RadioGroup
-              aria-label={question}
-              name={question}
-              value={answerValue}
-              onChange={handleAnswerValue}
-            >
-              {answers.map((answer: Answer) => (
-                <FormControlLabel
-                  key={answer.answer}
-                  value={answer.answer}
-                  onClick={() => handleCurrentAnswer(answer)}
-                  control={<Radio />}
-                  label={answer.answer}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
+            <FormControl component="fieldset">
+              <Typography variant="h6" component="legend">
+                {formQuizQuestion(question)}
+              </Typography>
+              <RadioGroup
+                aria-label={question}
+                name={question}
+                value={answerValue}
+                onChange={handleAnswerValue}
+              >
+                {answers.map((answer: Answer) => (
+                  <FormControlLabel
+                    key={answer.answer}
+                    value={answer.answer}
+                    onClick={() => handleCurrentAnswer(answer)}
+                    control={<Radio />}
+                    label={answer.answer}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
 
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={setNextQuestion}
-            disabled={!answerValue}
-          >
-            Next
-          </Button>
-        </>
-      )}
-      {currentQuestion >= quizLength && (
-        <>
-          <Typography variant="h3">Your score is:</Typography>
-          <Typography variant="h4">{getScore()}</Typography>
-          <Button variant="contained" color="secondary" onClick={restartQuiz}>
-            Try again
-          </Button>
-        </>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={setNextQuestion}
+              disabled={!answerValue}
+            >
+              Next
+            </Button>
+          </>
+        ) : (
+          <>
+            <Typography variant="h3">Your score is:</Typography>
+            <Typography variant="h4">{getScore()}</Typography>
+            <Button variant="contained" color="secondary" onClick={restartQuiz}>
+              Try again
+            </Button>
+          </>
+        ))}
+      {quizQuestions.length < 1 && (
+        <Typography variant="h3">Loading questions...</Typography>
       )}
     </Wrapper>
   );

@@ -18,6 +18,7 @@ interface Colors {
   white: string;
   black: string;
   darkerWhite: string;
+  brightRed: string;
 }
 
 interface FontWeight {
@@ -55,6 +56,7 @@ export const theme: Theme = {
     white: `#FFF`,
     black: `#111`,
     darkerWhite: `#ffffffcc`,
+    brightRed: `#f93822`,
   },
   font: {
     weight: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/components/Sidebar/index';
 import { ThemeProvider } from 'styled-components';
 
 import { theme } from '../theme/theme';
