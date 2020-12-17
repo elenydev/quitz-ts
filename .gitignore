@@ -4,6 +4,8 @@
 node_modules
 .pnp
 .pnp.js
+quitz-ts-server/src/constants
+
 
 # testing
 /coverage
