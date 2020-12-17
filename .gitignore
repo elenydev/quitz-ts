@@ -4,7 +4,7 @@
 node_modules
 .pnp
 .pnp.js
-constants
+quitz-ts-server/src/constants
 
 
 # testing
